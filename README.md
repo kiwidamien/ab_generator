@@ -11,4 +11,20 @@ Generates fake data into a database, simulating different user visits. Can speci
 
 ## Usage
 
+## Appendix
+
+### Installing Postgres on OSX
+```bash
+# Install postgres
+> brew install postgres
+
+# Start the postgres service
+> brew services start postgresql
+	
+# Create the default user database
+> createdb
+
+# Launch
+> psql
+```
 
