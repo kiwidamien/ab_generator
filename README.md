@@ -9,6 +9,10 @@ Generates fake data into a database, simulating different user visits. Can speci
 
 ## Installation instructions
 
+```bash
+pip install faker faker_web faker_cloud
+```
+
 ## Usage
 
 ## Appendix
