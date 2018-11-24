@@ -25,5 +25,4 @@ class user:
         '''
 
     def __repr__(self):
-        return f'{self.user_info['username']}'
-    
+        return f'{self.user_info["username"]}'

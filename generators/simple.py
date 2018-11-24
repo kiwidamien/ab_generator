@@ -4,6 +4,11 @@ Make a very simple generator for users and page views with only two variations.
 The idea is to see what we need to make, and then generalize with the appropriate parameters.
 
 This is supposed to be somewhat ugly and hardcoded
+
+Big Questions:
+* Should we include signup dates?
+* Should we include data from before the experiment started (i.e. see how users behaved before and after)
+* Should we have uses join in the experiment?
 """
 
 # Population
