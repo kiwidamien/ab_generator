@@ -1,3 +1,4 @@
+import datetime
 from scipy.stats import beta, poisson, dirichlet
 
 class PopulationSegment:
