@@ -1,14 +1,14 @@
 import numpy as np
 from scipy.stats import dirichlet
 
-DEFAULT_DEVICE_LIST = {
+DEFAULT_DEVICE_PARAMS = {
     'mobile': 5,
     'tablet': 1,
     'desktop': 20
 }
 
 class DevicePreference:
-    def __init__(self, device_params = DEFAULT_DEVICE_LIST):
+    def __init__(self, device_params = DEFAULT_DEVICE_PARAMS):
         """
         device_parms is a dictionary of the form
         {

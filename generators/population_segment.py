@@ -1,5 +1,5 @@
 from scipy.stats import beta, poisson, dirichlet
-from DevicePreference import DevicePreference
+from .DevicePreference import DevicePreference, DEFAULT_DEVICE_PARAMS
 
 DEFAULT_BETA_PARAMS = {
     'desktop': {'control': (10, 100), 'variation': (20, 120)},
@@ -8,7 +8,8 @@ DEFAULT_BETA_PARAMS = {
 }
 
 class PopulationSegment:
-    def __init__(self, name, beta_params = DEFAULT_BETA_PARAMS,
+    def __init__(self, name, beta_params=DEFAULT_BETA_PARAMS,
+                 device_params=DEFAULT_DEVICE_PARAMS,
                  hr_visit_rate_func=None):
         self.name = name
         if not hr_visit_rate_func:
@@ -21,8 +22,7 @@ class PopulationSegment:
                 'control': beta(*beta_params[device]['control']),
                 'variation': beta(*beta_params[device]['variation'])
             }
-        self.mobile, self.tablet, self.desktop = 30, 1, 100
-        self.device_distribution = self._get_distribution()
+        self.device_params = device_params
 
     def num_visits_in_hour(self, the_datetime):
         """Determines the number of visits starting at the_datetime, and going one hour"""
@@ -30,20 +30,15 @@ class PopulationSegment:
         num_visits = poisson(rate).rvs()
         return num_visits
 
-    def _get_distribution(self):
-        return dirichlet([self.mobile, self.tablet, self.desktop])
-
     def set_device_preferences(self, mobile, tablet, desktop):
-        self.mobile, self.tablet, self.desktop = mobile, tablet, desktop
-        self.device_distribution = self._get_distribution()
+        self.device_params = {
+            'mobile': mobile,
+            'tablet': tablet,
+            'desktop': desktop
+        }
 
     def get_device_preference_for_user(self):
-        device_params = {
-            'mobile': self.mobile,
-            'tablet': self.tablet,
-            'desktop': self.desktop
-        }
-        return DevicePreference(device_params)
+        return DevicePreference(self.device_params)
 
 if __name__ == '__main__':
     import datetime

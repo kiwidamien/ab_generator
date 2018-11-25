@@ -11,6 +11,7 @@ TrackedVisit = namedtuple('TrackedVisit', 'experiment date_visit user_agent vari
 
 class user:
     user_names = {}
+    PUBLIC_HEADER = ["username", "gender", "state", "user_agent", "variation"]
 
     def __init__(self, segment, sex=None, experiment_start=datetime(1900, 1, 1)):
         self.user_info = fake.simple_profile(sex)
@@ -60,7 +61,7 @@ class user:
         actual_rate = self.ctr_rate[device_type][variation]
         success = (random.random() < actual_rate)
 
-        return TrackedVisit(experiment='change_button', date_visit=the_date,
+        return TrackedVisit(experiment='button_clr', date_visit=the_date,
                             user_agent=f'{self.user_info["default_user_agent"]}',
                             device=device_type,
                             variation=variation, success=success)
@@ -88,6 +89,14 @@ class user:
             current_time += timedelta(hours=1)
 
         return visits
+
+    def write_line_public(self):
+        public_info = f'{self.user_info["username"]},{self.user_info["sex"]},{self.user_info["state"]},\'{self.user_info["default_user_agent"]}\',{self.variation}'
+        return public_info
+
+    def write_line_private(self):
+        private_info = f'{self.user_info["username"]},{self.user_info["sex"]},{self.segment.name},{self.actual_rates},{self.variation},{self.ctr_rate}'
+        return private_info
 
 if __name__ == '__main__':
     from hour_functions import make_humpday_daytime_power_user
