@@ -1,4 +1,6 @@
-# A/B (Jenn|Gen)erator
+# A/B Jenn|ator
+
+(Pronounce the '|' as 'or')
 
 Generates fake data into a database, simulating different user visits. Can specify different populations. Data is generated randomly by drawing from the distributions, and dumped into the table. Focuses on modeling page_visits (one of the most frequent use cases for A/B tests).
 
@@ -20,11 +22,10 @@ Generates fake data into a database, simulating different user visits. Can speci
 
 # Start the postgres service
 > brew services start postgresql
-	
+
 # Create the default user database
 > createdb
 
 # Launch
 > psql
 ```
-
