@@ -1,3 +1,4 @@
+# pylint: disable=C0111
 import datetime
 
 def make_weekend_power_user(base_rate):
@@ -69,5 +70,5 @@ def make_weekday_ends_power_user(base_rate):
                                       peak_mult=1.15, lull_mult=0.88)
 
 if __name__ == '__main__':
-    f = make_humpday_daytime_power_user(2)
-    print(f(datetime.datetime(2018, 11, 26, 11, 00)))
+    F = make_humpday_daytime_power_user(2)
+    print(F(datetime.datetime(2018, 11, 26, 11, 00)))

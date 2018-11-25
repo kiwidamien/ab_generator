@@ -1,4 +1,4 @@
-# pylint: disable=E0401, C0103
+# pylint: disable=E0401, C0103, C301
 from datetime import timedelta, datetime
 from collections import namedtuple
 import random
@@ -21,11 +21,14 @@ class user:
         self.user_info['default_user_agent'] = fake.user_agent()
         self.segment = segment
         self.variation = 'control'
-        self.ctr_rate = {
-            'control': segment.ctr_control.rvs(),
-            'variation': segment.ctr_variation.rvs()
-        }
-        self.actual_rate = self.ctr_rate[self.variation]
+
+        self.ctr_rate = {}
+        for device in segment.ctr:
+            self.ctr_rate[device] = {
+                'control': segment.ctr[device]['control'].rvs(),
+                'variation': segment.ctr[device]['variation'].rvs()
+            }
+        self.actual_rates = {device: self.ctr_rate[device][self.variation] for device in self.ctr_rate}
         self.experiment_start = experiment_start
 
     def __str__(self):
@@ -41,7 +44,7 @@ class user:
             self.variation = 'control'
         else:
             self.variation = 'variation'
-        self.actual_rate = self.ctr_rate[self.variation]
+        self.actual_rate = {device: self.ctr_rate[device][self.variation] for device in self.ctr_rate}
 
     def generate_single_visit(self, the_datetime, device_type='desktop'):
         the_date = the_datetime + timedelta(seconds=random.randint(0, 3599))
@@ -50,7 +53,7 @@ class user:
         if the_datetime < self.experiment_start:
             variation = 'control'
 
-        actual_rate = self.ctr_rate[variation]
+        actual_rate = self.ctr_rate[device_type][variation]
         success = (random.random() < actual_rate)
 
         return TrackedVisit(experiment='so_many_shoes', date_visit=the_date,
@@ -90,7 +93,7 @@ if __name__ == '__main__':
     segment2 = PopulationSegment('power_users',
                                  hr_visit_rate_func=make_humpday_daytime_power_user(2))
 
-    for _ in range(10000):
+    for _ in range(4):
         my_user = user(segment1)
     print(my_user)
     start_time = datetime(2018, 1, 1)
