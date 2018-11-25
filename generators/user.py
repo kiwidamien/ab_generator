@@ -17,6 +17,8 @@ class user:
         while self.user_info['username'] in user.user_names:
             self.user_info = fake.simple_profile(sex)
             print(f'collision! Have {len(user.user_names)} names')
+
+        self.user_info['state'] = fake.state_abbr(include_territories=True)
         user.user_names[self.user_info['username']] = True
         self.user_info['default_user_agent'] = fake.user_agent()
         self.segment = segment
@@ -28,6 +30,7 @@ class user:
                 'control': segment.ctr[device]['control'].rvs(),
                 'variation': segment.ctr[device]['variation'].rvs()
             }
+        self.device_preferences = segment.get_device_preference_for_user()
         self.actual_rates = {device: self.ctr_rate[device][self.variation] for device in self.ctr_rate}
         self.experiment_start = experiment_start
 
@@ -35,6 +38,7 @@ class user:
         return f'''
         username: {self.user_info['username']}
         gender: {self.user_info['sex']}
+        address: {self.user_info['address']}
         default browser: {self.user_info['default_user_agent']}
         segment: {self.segment.name}
         '''
@@ -56,7 +60,7 @@ class user:
         actual_rate = self.ctr_rate[device_type][variation]
         success = (random.random() < actual_rate)
 
-        return TrackedVisit(experiment='so_many_shoes', date_visit=the_date,
+        return TrackedVisit(experiment='change_button', date_visit=the_date,
                             user_agent=f'{self.user_info["default_user_agent"]}',
                             device=device_type,
                             variation=variation, success=success)
@@ -70,7 +74,7 @@ class user:
         #   the result of the die roll. Think about which makes more sense
         num_visits = self.segment.num_visits_in_hour(the_datetime)
         if device is None:
-            device = 'desktop'
+            device = self.device_preferences.generate_device()
         return [self.generate_single_visit(the_datetime, device) for _ in range(num_visits)]
 
     def generate_visits_between(self, start_time, end_time, device=None):

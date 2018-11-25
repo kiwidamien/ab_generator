@@ -1,4 +1,5 @@
 from scipy.stats import beta, poisson, dirichlet
+from DevicePreference import DevicePreference
 
 DEFAULT_BETA_PARAMS = {
     'desktop': {'control': (10, 100), 'variation': (20, 120)},
@@ -35,6 +36,14 @@ class PopulationSegment:
     def set_device_preferences(self, mobile, tablet, desktop):
         self.mobile, self.tablet, self.desktop = mobile, tablet, desktop
         self.device_distribution = self._get_distribution()
+
+    def get_device_preference_for_user(self):
+        device_params = {
+            'mobile': self.mobile,
+            'tablet': self.tablet,
+            'desktop': self.desktop
+        }
+        return DevicePreference(device_params)
 
 if __name__ == '__main__':
     import datetime
