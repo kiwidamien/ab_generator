@@ -1,9 +1,12 @@
+# pylint: disable=E0401, C0103
 from datetime import timedelta
 import random
 
 from faker import Faker
 
 fake = Faker()
+
+TrackedVisit = namedtuple('TrackedVisit', 'experiment date_visit user_agent variation success device')
 
 class user:
     def __init__(self, segment, sex=None):
@@ -36,9 +39,10 @@ class user:
         the_date = the_datetime + timedelta(seconds=random.randint(0, 3599))
         success = (random.random() < self.actual_rate)
 
-        return tracked_visit(experiment='so_many_shoes', date_visit=the_date,
-                             user_agent=f'{self.user_info["default_user_agent"]}',
-                             variation=self.variation, success=success)
+        return TrackedVisit(experiment='so_many_shoes', date_visit=the_date,
+                            user_agent=f'{self.user_info["default_user_agent"]}',
+                            device=device_type,
+                            variation=self.variation, success=success)
 
     def generate_visits_in_hour(self, the_datetime, device=None):
         """stuff"""

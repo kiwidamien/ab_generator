@@ -68,5 +68,6 @@ def make_weekday_ends_power_user(base_rate):
                                       dead_times=range(0, 8),
                                       peak_mult=1.15, lull_mult=0.88)
 
-f = make_humpday_daytime_power_user(2)
-print(f(datetime.datetime(2018, 11, 26, 11, 00)))
+if __name__ == '__main__':
+    f = make_humpday_daytime_power_user(2)
+    print(f(datetime.datetime(2018, 11, 26, 11, 00)))

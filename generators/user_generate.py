@@ -14,7 +14,7 @@ class user:
         self.user_info['default_user_agent'] = fake.user_agent()
 
         if variation_assignment_function:
-            self.variation_info = variation_assignment_function(user_info)
+            self.variation_info = variation_assignment_function(self.user_info)
 
     def __str__(self):
         return f'''
