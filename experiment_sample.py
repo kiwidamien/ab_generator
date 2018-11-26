@@ -8,6 +8,7 @@ from generators.hour_functions import *
 
 import random
 import datetime
+import os
 
 # Make a difference between men and women.
 # Women have higher purchase rate overall
@@ -17,8 +18,8 @@ import datetime
 
 MEN1_DESKTOP = {
     'beta_params': {
-        'desktop': {'control': (10, 100), 'variation': (30, 200)},
-        'mobile': {'control': (7, 100), 'variation': (10, 100)},
+        'desktop': {'control': (10, 100), 'variation': (23, 200)},
+        'mobile': {'control': (9, 100), 'variation': (8.3, 100)},
         'tablet': {'control': (8, 100), 'variation': (6, 100)}
     },
     'hr_visit_rate_func': make_humpday_daytime_power_user(6/168),
@@ -32,9 +33,9 @@ MEN1_DESKTOP = {
 
 WOMEN1_DESKTOP = {
     'beta_params': {
-        'desktop': {'control': (12, 100), 'variation': (25, 140)},
-        'mobile': {'control': (9, 100), 'variation': (11, 100)},
-        'tablet': {'control': (4, 100), 'variation': (3, 100)}
+        'desktop': {'control': (12, 100), 'variation': (19, 140)},
+        'mobile': {'control': (11, 100), 'variation': (10, 100)},
+        'tablet': {'control': (4, 100), 'variation': (1, 100)}
     },
     'hr_visit_rate_func': make_humpday_daytime_power_user(5/168),
     'name': 'women_midweek_user',
@@ -47,8 +48,8 @@ WOMEN1_DESKTOP = {
 
 MEN_WEEKEND_MIX = {
     'beta_params': {
-        'desktop': {'control': (8, 100), 'variation': (28, 200)},
-        'mobile': {'control': (8, 100), 'variation': (13, 100)},
+        'desktop': {'control': (8, 100), 'variation': (20, 220)},
+        'mobile': {'control': (8, 100), 'variation': (7.2, 100)},
         'tablet': {'control': (8, 100), 'variation': (8, 100)}
     },
     'hr_visit_rate_func': make_weekend_power_user(11/168),
@@ -63,7 +64,7 @@ MEN_WEEKEND_MIX = {
 WOMEN_WEEKEND_MIX = {
     'beta_params': {
         'desktop': {'control': (11, 100), 'variation': (35, 300)},
-        'mobile': {'control': (11, 100), 'variation': (27, 200)},
+        'mobile': {'control': (11, 100), 'variation': (19, 200)},
         'tablet': {'control': (12, 100), 'variation': (8, 100)}
     },
     'hr_visit_rate_func': make_weekend_power_user(10/168),
@@ -77,8 +78,8 @@ WOMEN_WEEKEND_MIX = {
 
 GENERIC_USER = {
     'beta_params': {
-        'desktop': {'control': (6, 100), 'variation': (8, 100)},
-        'mobile': {'control': (6, 100), 'variation': (9, 100)},
+        'desktop': {'control': (6, 100), 'variation': (14, 200)},
+        'mobile': {'control': (7, 100), 'variation': (6, 100)},
         'tablet': {'control': (6, 100), 'variation': (3, 100)}
     },
     'hr_visit_rate_func': make_humpday_evening_power_user(4/168),
@@ -148,6 +149,12 @@ def write_user(the_user, filename_public, filename_private):
         file.write(the_user.write_line_public()+'\n')
     with open(filename_private, 'a') as file:
         file.write(the_user.write_line_private()+'\n')
+
+for file in ['visits.csv', 'user_public.csv', 'user_private.csv']:
+    try:
+        os.remove(file)
+    except:
+        print(f'{file:12s} does not need to be removed')
 
 for the_user in user_list:
     write_visits(the_user, 'visits.csv')
